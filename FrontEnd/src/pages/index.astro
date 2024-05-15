@@ -1,0 +1,18 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Home from "@/components/Home.astro";
+import Footer from "@/components/Footer.astro";
+---
+
+<Layout title="MyUnsplash">
+  <main class="w-full h-full">
+    <Home />
+    <Footer />
+  </main>
+</Layout>
+
+<script>
+  import { $validateToken } from "@/stores/userStore";
+
+  await $validateToken();
+</script>

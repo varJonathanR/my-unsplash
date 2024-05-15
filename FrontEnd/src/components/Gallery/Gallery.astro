@@ -1,0 +1,11 @@
+---
+import GalleryItem from "@/components/Gallery/GalleryItem.astro";
+import { $gallery } from "@/stores/galleryStore";
+import type { GetPhoto } from "@/utils/types.ts";
+
+const gallery = $gallery.get();
+---
+
+<section class="w-full h-full pt-20 p-4 columns-1 md:columns-2 lg:columns-3">
+    { gallery.map((photo: GetPhoto) => <GalleryItem src={photo.url} title={photo.title} id={photo.id} />) }
+</section>

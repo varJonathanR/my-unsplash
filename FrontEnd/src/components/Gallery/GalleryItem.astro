@@ -1,0 +1,149 @@
+---
+import ActionIcon from "@/components/Gallery/ActionIcon.astro";
+import DeleteImage from "@/components/Modal/DeleteImage.astro";
+
+interface Props {
+    src: string;
+    title: string;
+    id?: string;
+}
+
+const { src, title, id } = Astro.props;
+---
+
+<article class="w-full h-fit mb-4 rounded-3xl overflow-hidden relative">
+    <DeleteImage title={title} id={id} />
+    <img src={src} alt={title} loading="lazy" class="w-full h-full content-center">
+    <div class="absolute top-0 right-0 p-4 flex gap-2">
+        <button 
+            class="delete-image text-transparent bg-transparent"
+            title="Delete image"
+        ><ActionIcon icon="Delete" /></button>
+        <button 
+            class="copy-url text-transparent bg-transparent"
+            title="Copy image URL"
+        ><ActionIcon icon="Copy" /></button>
+    </div>
+    <p class="p-4 absolute bottom-0 left-0 text-transparent text-xl">{title}</p>
+    <span class="image-src hidden">{src}</span>
+</article>
+
+<style>
+    article::before, p, button {
+        transition: .4s ease all;
+    }
+
+    button {
+        border-radius: 50%;
+        padding: 1rem;
+    }
+
+    article::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    article:hover {
+        &::before {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        & p {
+            color: white;
+        }
+
+        .delete-image, .copy-url {
+            color: rgb(229, 231, 235);
+        }
+
+        & .delete-image:hover {
+            color: rgb(220, 38, 38);
+        }
+
+        & .copy-url:hover {
+            color: rgb(3, 105, 161);
+        }
+
+        & .copy-url.copied {
+            color: rgb(132, 204, 22);
+        }
+    }
+</style>
+
+<script>
+    import { $isAuthenticated } from "@/stores/userStore";
+    import { $deletePhoto, $galleryError } from "@/stores/galleryStore";
+    import type { DeletePhoto } from "@/utils/types";
+
+    const deleteImg: NodeListOf<HTMLElement> = document.querySelectorAll(".delete-image");
+
+    // Show delete btn if user is auth & open modal to delete image
+    if (deleteImg) deleteImg.forEach((deleteBtn: HTMLElement) => {
+        $isAuthenticated.subscribe(auth => {
+            if (auth) {
+                deleteBtn.style.display = "flex";
+
+                deleteBtn.addEventListener("click", () => {
+                    const modal = deleteBtn.closest("article")?.querySelector(".deleteDialog") as HTMLDialogElement;
+                    modal.showModal();
+
+                    const deleteForm: HTMLFormElement = modal.querySelector("form.deleteForm") as HTMLFormElement;
+                    const imageID: HTMLInputElement = modal.querySelector("input.imageID") as HTMLInputElement;
+                    const errorMessage: HTMLElement = modal.querySelector("div.errorMessage") as HTMLElement;
+
+                    if (modal.open && deleteForm && imageID) {
+                        const close: HTMLElement | null = modal.querySelector(".cancelD");
+
+                        deleteForm?.addEventListener("submit", async (e: any) => {
+                            e.preventDefault();
+
+                            if (!e.target[0].value || !imageID.value) return errorMessage.innerHTML = "Invalid credential";
+                            
+                            try {
+                                const password = e.target[0].value;
+                                const photo: DeletePhoto = {
+                                    id: imageID.value,
+                                    password
+                                };
+
+                                await $deletePhoto(photo);
+
+                                const err = $galleryError.get();
+                                if (err) return errorMessage.innerHTML = err[0];
+                            } catch (error) {
+                                
+                            }
+                        })
+
+                        close?.addEventListener("click", () => {
+                            modal.close();
+                        });
+                    };
+                });
+            } else {
+                deleteBtn.style.display = "none";
+            }
+        })
+    });
+
+    // Copy URL to clipboard
+    const copyUrls: NodeListOf<HTMLElement> = document.querySelectorAll(".copy-url");
+
+    if (copyUrls) copyUrls.forEach((copyUrl: HTMLElement) => {
+        copyUrl.addEventListener("click", async () => {
+            const url: string | null = copyUrl.closest("article")?.querySelector(".image-src")?.innerHTML ?? null;
+            if (url) {
+                try {
+                    await navigator.clipboard.writeText(url);
+                    copyUrl.classList.add("copied");
+                } catch (error) {
+                    console.error("Error copying URL to clipboard:", error);
+                }
+            }
+        });
+    });
+</script>

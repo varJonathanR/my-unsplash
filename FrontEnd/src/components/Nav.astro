@@ -1,0 +1,60 @@
+---
+import AddImage from "@/components/Modal/AddImage.astro";
+---
+
+<nav class="w-full h-13 bg-gray-50 flex items-center justify-between shadow-md fixed p-4 z-50">
+  <div>
+    <img
+      src="/my_unsplash_logo.svg"
+      alt="MyUnsplash logo"
+      class="w-auto h-full"
+    />
+  </div>
+  <div id="authAction" class="gap-2 text-[.85rem] md:text-base">
+    <a class="auth-btn hover:bg-gray-300" href="/login" id="login">Log In</a>
+    <a class="auth-btn bg-green-600 border-green-600 text-white hover:bg-green-800" href="/signup" id="signup">Sign Up</a>
+  </div>
+  <div id="userAuth" class="gap-2 text-[.85rem] md:text-base">
+    <button id="logoutbtn" class="py-[3px] hover:text-red-900 hover:bg-red-300">Log Out</button>
+    <button class="showAddModal bg-green-600 border-green-600 text-white hover:bg-green-800">Add photo</button>
+  </div>
+  <AddImage />
+</nav>
+
+
+<style>
+  a {
+    text-align: center;
+    padding-block: 4px;
+  }
+</style>
+
+<script>
+  import { $ } from "@/lib/dom-selector";
+  import { $isAuthenticated, $logout } from "@/stores/userStore";
+  
+  const $logoutbtn = $("#logoutbtn") as HTMLButtonElement;
+  const $openModal = $(".showAddModal") as HTMLButtonElement;
+  const $modal = $(".addDialog") as HTMLDialogElement;
+
+  const $authAction: HTMLElement = $("#authAction");
+  const $userAuth: HTMLElement = $("#userAuth");
+
+  $isAuthenticated.subscribe(auth => {
+    if (auth) {
+      $authAction.style.display = "none";
+      $userAuth.style.display = "flex";
+    } else {
+      $authAction.style.display = "flex";
+      $userAuth.style.display = "none";
+    }
+  })
+
+  if ($logoutbtn) $logoutbtn.addEventListener("click", async () => {
+    $logout();
+  });
+
+  if ($openModal) $openModal.addEventListener("click", () => {
+    $modal.showModal();
+  });
+</script>

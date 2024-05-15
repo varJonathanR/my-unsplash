@@ -1,0 +1,24 @@
+### Register
+POST http://localhost:1234/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "Admin0",
+  "email": "admin0@admin.com",
+  "password": "admin0"
+}
+
+### Login
+POST http://localhost:1234/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin0@admin.com",
+  "password": "admin0"
+}
+
+### Logout
+POST http://localhost:1234/api/auth/logout
+
+### Verify session
+GET http://localhost:1234/api/auth/verify

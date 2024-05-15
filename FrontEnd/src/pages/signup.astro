@@ -1,0 +1,55 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SignInBG from "@/components/auth/AuthBG.astro";
+
+import Form from "@/components/auth/Form.astro";
+---
+
+<Layout title="Sign Up | MyUnsplash">
+  <SignInBG>
+    <Form title="Join to" id="signup" includeUsername action="Join Now" redirectMessage="Already have an account?" redirectTo="/login" />
+  </SignInBG>
+</Layout>
+
+<script>
+  import { $authError, $isAuthenticated, $signup, $validateToken } from "@/stores/userStore";
+  import type { User } from "@/utils/types";
+
+  await $validateToken();
+  if ($isAuthenticated.get()) window.location.href = "/";
+
+  const signupForm: HTMLElement | null = document.getElementById("signup");
+  const errorMessage: HTMLElement | null = document.getElementById("errorMessage");
+
+  if (signupForm && errorMessage) signupForm.addEventListener("submit", async (e: any) => {
+
+    e.preventDefault();
+
+    try {
+      const user: User = {
+        username: e.target[0].value,
+        email: e.target[1].value,
+        password: e.target[2].value
+      };
+
+      if (!user.username || !user.email || !user.password) {
+        return errorMessage.innerHTML = "Fields should not be empty";
+      }
+
+      await $signup(user);
+
+      const err = $authError.get();
+      if (err) {
+        errorMessage.innerHTML = ""; 
+        err.forEach(e => {
+            const errorMessageItem = document.createElement("span"); 
+            errorMessageItem.textContent = e;
+            errorMessage.appendChild(errorMessageItem);
+        });
+      }
+    } catch (error) {
+      const err = $authError.get();
+      if (err) errorMessage.innerHTML = "Invalid credentials";
+    }
+  })
+</script>

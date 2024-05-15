@@ -1,0 +1,84 @@
+<dialog class="addDialog mx-auto mt-32 p-4 w-[500px] rounded-xl backdrop:bg-black/70">
+    <p class="pb-3 font-semibold text-2xl">Add a new photo</p>
+    <form action="" class="addForm flex flex-col" autocomplete="off">
+        <label for="title">
+            Label
+            <input id="title" type="text" placeholder="Photo title">
+        </label>
+        <label for="url">
+            Photo URL
+            <input id="url" type="text" placeholder="Photo URL">
+        </label>
+        <div class="mt-4 flex gap-2 items-center justify-end">
+            <span class="errorMessage text-red-700 h-3 mb-2 text-sm w-full text-left"></span>
+            <button type="button" class="cancel hover:bg-gray-200">Cancel</button>
+            <button type="submit" class="add bg-green-600 border-green-600 text-white hover:bg-green-800">Submit</button>
+        </div>
+    </form>
+</dialog>
+
+<style>
+    dialog::backdrop {
+    opacity: 0.75;
+    }
+
+    label {
+        display: block;
+        border: none;
+        padding: 0;
+        margin-bottom: .6rem;
+    }
+
+    input {
+        width: 100%;
+        border-radius: 24px;
+        padding-inline: .8rem;
+        padding-block: .5rem;
+        border: 1px solid rgb(107, 114, 128);
+        gap: 10px;
+        background-color: transparent;
+    }
+</style>
+
+<script>
+    import { $ } from "@/lib/dom-selector";
+    import { $user } from "@/stores/userStore";
+    import { $addPhoto } from "@/stores/galleryStore";
+    import { validateURL, isValidPhotoUrl } from "@/utils/photoValidation";
+    import type { Photo } from "@/utils/types";
+
+    const $modal = $(".addDialog") as HTMLDialogElement;
+    const $cancel: HTMLElement = $(".cancel");
+    const $addFrom: HTMLFormElement = $(".addForm") as HTMLFormElement;
+    const $errorMessage: HTMLSpanElement = $(".errorMessage");
+
+
+    if ($cancel) $cancel.addEventListener("click", () => {
+        $modal.close();
+    });
+
+    if ($addFrom && $errorMessage) $addFrom.addEventListener("submit", async (e: any) => {
+        e.preventDefault();
+
+        try {
+            const userId = $user.get();
+            if (!userId) return;
+
+            const photo: Photo = {
+                title: e.target[0].value,
+                url: e.target[1].value
+            };
+
+            if (!photo.title) return $errorMessage.innerHTML = "Title is required";
+
+            const validUnsplashPhoto = validateURL(photo.url);
+            const isValidPhoto = await isValidPhotoUrl(photo.url);
+
+            if (!validUnsplashPhoto || !isValidPhoto) return $errorMessage.innerHTML = "Invalid URL";
+
+            await $addPhoto(photo);
+        } catch (error) {
+            $errorMessage.innerHTML = "Error";
+        }
+    })
+</script>

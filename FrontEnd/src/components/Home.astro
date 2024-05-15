@@ -1,0 +1,12 @@
+---
+import Nav from "@/components/Nav.astro";
+import Gallery from "@/components/Gallery/Gallery.astro";
+import { $allPhotos } from "@/stores/galleryStore";
+
+await $allPhotos();
+---
+
+<div class="w-full h-full relative">
+  <Nav />
+  <Gallery />
+</div>

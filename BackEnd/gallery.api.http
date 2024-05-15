@@ -1,0 +1,20 @@
+### Get all photos in DB
+GET http://localhost:1234/api/gallery/getall
+
+### Add photo (must be logged in)
+POST http://localhost:1234/api/gallery/add
+Content-Type: application/json
+
+{
+    "title": "Five floors with assorted color themes",
+    "url": "https://images.unsplash.com/photo-1518799937599-77763326c394?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+}
+
+### Delete photo (must be logged in)
+DELETE http://localhost:1234/api/gallery/delete
+Content-Type: application/json
+
+{
+    "id": "PHOTO_ID",
+    "password": "admin0"
+}
