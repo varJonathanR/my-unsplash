@@ -2,8 +2,10 @@
 import Nav from "@/components/Nav.astro";
 import Gallery from "@/components/Gallery/Gallery.astro";
 import { $allPhotos } from "@/stores/galleryStore";
+import { $validateToken } from "@/stores/userStore";
 
 await $allPhotos();
+await $validateToken();
 ---
 
 <div class="w-full h-full relative">

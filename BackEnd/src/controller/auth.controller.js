@@ -4,6 +4,10 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { createAccessToken } from "../libs/jwt.js";
 
+const cookieOptions = {
+  expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRATION * 24 * 60 * 60 * 1000)
+};
+
 export class AuthController {
   static async register (req, res) {
     const { username, email, password } = req.body;
@@ -16,12 +20,8 @@ export class AuthController {
       if (!userSaved) return res.status(400).json(["User already exist"]);
 
       const token = await createAccessToken({ id: userSaved.id });
-      const cookieOption = {
-        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRATION * 24 * 60 * 60 * 1000)
-      };
   
-      res.cookie("token", token, cookieOption);
-      res.status(200).json({ message: "OK" });
+      res.status(200).cookie("token", token, cookieOptions);
     } catch (error) {
       res
         .status(500)
@@ -43,12 +43,8 @@ export class AuthController {
       if (!isMatch) return res.status(400).json(["Invalid credentail"]);
       
       const token = await createAccessToken({ id: user.id });
-      const cookieOption = {
-        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRATION * 24 * 60 * 60 * 1000)
-      };
   
-      res.cookie("token", token, cookieOption);
-      res.status(200).json({ message: "OK" });
+      res.status(200).cookie("token", token, cookieOptions);
     } catch (error) {
       res
         .status(500)

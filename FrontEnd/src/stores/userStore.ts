@@ -31,7 +31,8 @@ export const $signin = async (user: User) => {
 };
 
 export const $validateToken = async () => {
-    const cookies = Cookies.get()
+    const cookies = Cookies.get();
+    if (!cookies) return;
 
     if (cookies.token) {
         try {

@@ -8,4 +8,4 @@ export const loginReq = async (user: User): Promise<AxiosResponse> => axios.post
 
 export const verifyTokenReq = async (): Promise<AxiosResponse> => axios.get("/auth/verify");
 
-export const logoutReq = (): Promise<AxiosResponse> => axios.post("auth/logout");
+export const logoutReq = (): Promise<AxiosResponse> => axios.post("/auth/logout");
