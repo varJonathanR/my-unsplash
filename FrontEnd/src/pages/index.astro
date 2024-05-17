@@ -10,3 +10,9 @@ import Footer from "@/components/Footer.astro";
     <Footer />
   </main>
 </Layout>
+
+<script>
+  import { $validateToken } from "@/stores/userStore";
+
+  await $validateToken();
+</script>

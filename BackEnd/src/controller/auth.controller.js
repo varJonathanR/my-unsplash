@@ -1,4 +1,4 @@
-/* import { AuthModel } from "../models/mysql/auth.model.js"; Use this on local */
+/* import { AuthModel } from "../models/mysql/auth.model.js";  */
 import { AuthModel } from "../models/turso/auth.model.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -22,6 +22,7 @@ export class AuthController {
       const token = await createAccessToken({ id: userSaved.id });
   
       res.status(200).cookie("token", token, cookieOptions);
+      res.status(200).json({ message: "OK" });
     } catch (error) {
       res
         .status(500)
@@ -45,6 +46,7 @@ export class AuthController {
       const token = await createAccessToken({ id: user.id });
   
       res.status(200).cookie("token", token, cookieOptions);
+      res.status(200).json({ message: "OK" });
     } catch (error) {
       res
         .status(500)

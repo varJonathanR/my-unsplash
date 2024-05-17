@@ -5,10 +5,7 @@ const PRODUCTION_API = import.meta.env.PUBLIC_PRODUCTION_API;
 
 const instance = axios.create({
     baseURL: PRODUCTION_API,
-    withCredentials: true,
-    headers: {
-        "Content-type": "application/json"
-    }
+    withCredentials: true
 });
 
 export default instance;

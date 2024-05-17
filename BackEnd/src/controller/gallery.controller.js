@@ -1,4 +1,4 @@
-/* import { GalleryModel } from "../models/mysql/gallery.model.js"; Use this on local */
+/* import { GalleryModel } from "../models/mysql/gallery.model.js";  */
 import { GalleryModel } from "../models/turso/gallery.model.js";
 
 export class GalleryController {
@@ -8,7 +8,6 @@ export class GalleryController {
             
             return res.json(gallery);
         } catch (error) {
-            console.log(error);
             res
                 .status(500)
                 .json({ message: error.message })

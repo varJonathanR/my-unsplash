@@ -13,7 +13,7 @@ const PORT = process.env.PORT ?? 1234;
 // Config
 dotenv.config();
 app.disable("x-powered-by");
-app.use(corsMiddleware());
+app.use("*", corsMiddleware());
 app.use(json());
 app.use(cookieParser());
 app.use(morgan("dev"));
