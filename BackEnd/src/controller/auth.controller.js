@@ -5,7 +5,9 @@ import jwt from "jsonwebtoken";
 import { createAccessToken } from "../libs/jwt.js";
 
 const cookieOptions = {
-  expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRATION * 24 * 60 * 60 * 1000)
+  expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRATION * 24 * 60 * 60 * 1000),
+  secure: true,
+  sameSite: "None"
 };
 
 export class AuthController {

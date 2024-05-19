@@ -6,11 +6,11 @@
 
 <div align="center">
   <h3>
-    <a href="">
+    <a href="https://my-unsplash-varjonathanr.vercel.app/">
       Demo
     </a>
     <span> | </span>
-    <a href="">
+    <a href="https://legacy.devchallenges.io/solutions/iFoeYshwlQPu5uDvz4ql">
       Solution
     </a>
     <span> | </span>
@@ -32,11 +32,16 @@
 
 ![MyUnsplash Preview](https://github.com/varJonathanR/my-unsplash/blob/main/my-unsplash_preview.png)
 
+> [View this repo as if in a code editor](https://github.dev/varJonathanR/my-unsplash)
+
 This fullstack project is a simplified clone of [Unsplash](https://unsplash.com/), a platform for sharing high-quality images. It allows registered users to save images using the direct image link from unsplash. The application features a clean and user-friendly design. It utilizes technologies like [Astro](https://astro.build/) for the frontend, [Node.js](https://nodejs.org/en) and [Express](https://expressjs.com/) for the backend, and a [MySQL](https://www.mysql.com/) database (locally) or [Turso](https://turso.tech/) (in production) to store information about images and users.
 
-> Note:
+> [!TIP]
 > Right click on Unsplash image and click on "Copy Image Address" <br>
-> Valid link example: https://images.unsplash.com/photo-1713432924449-c01531ef3821?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+> Valid link example: https://images.unsplash.com/photo-(...) <br>
+
+> [!NOTE]
+> While the backend functions correctly, there is an issue with Vercel in production where cookies are not saved when redirecting to '/' (this does not happen in the local environment).
 
 ### Built With
 
