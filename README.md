@@ -41,7 +41,7 @@ This fullstack project is a simplified clone of [Unsplash](https://unsplash.com/
 > Valid link example: https://images.unsplash.com/photo-(...) <br>
 
 > [!NOTE]
-> While the backend functions correctly, there is an issue with Vercel in production where cookies are not saved when redirecting to '/' (this does not happen in the local environment).
+> While the backend functions correctly, there is an issue with Vercel in production where cookies are not saved when redirecting to '/' (this does not happen in the local environment, even using the production API).
 
 ### Built With
 
